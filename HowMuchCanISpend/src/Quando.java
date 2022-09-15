@@ -55,6 +55,9 @@ public class Quando {
         return mes == quando.mes && dia == quando.dia && possogastar == quando.possogastar;
     }
 
+    public String toString(){
+        return this.dia +"/"+this.getMes();
+    }
     public int hashCode() {
         return Objects.hash(mes, dia,possogastar);
     }

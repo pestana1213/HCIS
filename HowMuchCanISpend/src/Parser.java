@@ -17,7 +17,6 @@ public class Parser {
         for (String linha : linhas) {
             linhaPartida = linha.split(":", 2);
             j.setNome(linhaPartida[0]);
-            System.out.println(linhaPartida[0]);
             j = User.parse(linhaPartida[1],linhaPartida[0]);
             HCIS s = parseTabela(j);
             main.addUser(j,s);
@@ -29,11 +28,10 @@ public class Parser {
 
         for(int i = 1; i<=12;i++){
             List<String> linhas = lerFicheiro("C:\\Users\\Pestana\\Desktop\\HowMuchCanISpend\\logs\\" + u.getNome()
-            +"\\mes" + i);
+            +"\\mes" + i+".txt");
             HCIS novo = new HCIS();
             Quando quando = new Quando();
             String[] linhaPartida;
-
             for (String linha : linhas) {
                 linhaPartida = linha.split(":", 2);
                 int dia = Integer.parseInt(linhaPartida[0]);

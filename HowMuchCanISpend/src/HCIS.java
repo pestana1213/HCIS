@@ -1,10 +1,6 @@
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -34,6 +30,10 @@ public class HCIS {
             }
         }
         return 0;
+    }
+
+    public void addQuando(Quando quando,float gasto){
+        this.gastoPorDia.put(quando,gasto);
     }
 
     public int quantosdiastemomes(int mes) throws Exception {
@@ -83,12 +83,20 @@ public class HCIS {
                 mes = 1;
                 dia = 31;
             }
+            return dinheirodisponivelpordia;
         }
         int finalDia = dia;
         int finalMes = mes;
-        Quando ant = this.gastoPorDia.keySet().stream().filter(e->e.getDia()== finalDia && e.getMes()== finalMes).collect(Collectors.toCollection(ArrayList::new)).get(0);
-        float gastonodiaant = this.gastoPorDia.get(ant);
-        return (dinheirodisponivelpordia + ant.getPossogastar()) - gastonodiaant;
+        Quando ant = null;
+        if( this.gastoPorDia.keySet().stream().filter(e->e.getDia()== finalDia && e.getMes()== finalMes).collect(Collectors.toCollection(ArrayList::new)).size()>0){
+            ant = this.gastoPorDia.keySet().stream().filter(e->e.getDia()== finalDia && e.getMes()== finalMes).collect(Collectors.toCollection(ArrayList::new)).get(0);
+            float gastonodiaant = this.gastoPorDia.get(ant);
+            return (dinheirodisponivelpordia + ant.getPossogastar()) - gastonodiaant;
+        }
+        else{
+            return (dinheirodisponivelpordia);
+        }
+
     }
 
     public void addgasto(Quando quando, float gasto){
@@ -117,7 +125,26 @@ public class HCIS {
         return null;
     }
 
-    public void save(){
+    public float getGastoNoDia(int mes, int dia) throws Exception {
+        if(this.gastoPorDia.keySet().stream().filter(e->e.getDia()==dia && e.getMes()==mes).collect(Collectors.toCollection(ArrayList::new)).size()>0){
+            Quando quando = this.gastoPorDia.keySet().stream().filter(e->e.getDia()==dia && e.getMes()==mes).collect(Collectors.toCollection(ArrayList::new)).get(0);
+            return this.gastoPorDia.get(quando);
+        }
+        else{
+            throw new Exception();
+        }
+    }
 
+    public void makeTables(){
+
+        ArrayList<Quando> datas = new ArrayList<>(this.gastoPorDia.keySet());
+        datas.sort(new Comparator());
+        for(Quando quando : datas){
+            float gasto = 0;
+            if (this.gastoPorDia.get(quando) != null){
+                gasto = this.gastoPorDia.get(quando);
+            }
+            System.out.println(quando.getDia() + "/" + quando.getMes() +": Podia gastar: " + quando.getPossogastar() + "Gasto: " + gasto);
+        }
     }
 }
